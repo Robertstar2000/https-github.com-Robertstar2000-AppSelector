@@ -1,0 +1,85 @@
+version: '3.8'
+
+networks:
+  # External network for Ingress (Traefik) - As per swarm.md
+  traefik_external:
+    external: true
+    name: infra_traefik
+  # Dedicated network for this stack's Traefik communication
+  traefik_app:
+    driver: overlay
+    attachable: true
+  # Private internal network for App <-> DB communication
+  app_internal:
+    driver: overlay
+    attachable: true
+
+services:
+  app:
+    image: node:20-bullseye-slim
+    working_dir: /app
+    environment:
+      - NODE_ENV=production
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=tallman_app
+      - PORT=3100
+    volumes:
+      # In absolute production, these would be built into the image or mounted from NFS
+      - .:/app
+      - /app/node_modules
+    networks:
+      - traefik_app
+      - app_internal
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3100" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+      labels:
+        # Traefik Routing Configuration (swarm.md compliant)
+        - "traefik.enable=true"
+        - "traefik.http.routers.tallman_app.rule=Host(`app.swarm.tallmanequipment.com`)"
+        - "traefik.http.routers.tallman_app.entrypoints=https"
+        - "traefik.http.routers.tallman_app.tls.certresolver=letsencrypt"
+        - "traefik.http.services.tallman_app.loadbalancer.server.port=3100"
+        - "traefik.swarm.network=infra_traefik"
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tallman_app
+    networks:
+      - app_internal # Isolated from Traefik
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+
+volumes:
+  postgres_data:

@@ -16,8 +16,15 @@ export interface AppDefinition {
   description: string;
   iconName: string; // Key to map to Lucide icons
   url?: string;
+
   status: AppStatus;
   type: AppType;
+  // Optional Metadata
+  owner?: string;
+  sourceUrl?: string;
+  backendPort?: string;
+  aiModel?: string;
+  sortOrder?: number;
 }
 
 export interface ChatMessage {

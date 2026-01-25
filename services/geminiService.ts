@@ -1,21 +1,30 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-let client: GoogleGenAI | null = null;
+let client: GoogleGenerativeAI | null = null;
 
 // Initialize client with environment variable
 // Note: In a real production app, you might want to proxy this through a backend
 // to hide the key, but for this internal tool demo, we assume the env is available.
 const getClient = () => {
-  if (!client && process.env.API_KEY) {
-    client = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  // Use VITE_GEMINI_API_KEY if available in frontend, or fallback to process.env for Node compatibility
+  /*
+  const apiKey = import.meta.env?.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || process.env.API_KEY;
+  
+  if (!client && apiKey) {
+    client = new GoogleGenerativeAI(apiKey);
   }
   return client;
+  */
+  return null;
 };
 
 export const sendMessageToGemini = async (
   message: string,
   history: { role: string; parts: { text: string }[] }[] = []
 ): Promise<string> => {
+
+  // AI DISABLED
+  /*
   const ai = getClient();
   
   if (!ai) {
@@ -23,26 +32,31 @@ export const sendMessageToGemini = async (
   }
 
   try {
-    const model = 'gemini-2.5-flash';
+    // Corrected model name and usage for the new SDK
+    const model = ai.getGenerativeModel({ 
+        model: 'gemini-1.5-flash',
+        systemInstruction: "You are a helpful corporate assistant for Tallman Equipment. You are professional, concise, and helpful. You know about industrial equipment, safety gear, and corporate logistics."
+    });
     
-    // Construct the prompt with history if needed, or use chat mode
-    // For simplicity in this demo, we'll use a single generateContent for the "quick answer"
-    // or a chat session if we were persisting the object.
-    // Let's use the chat capability for better context.
-    
-    const chat = ai.chats.create({
-        model: model,
-        config: {
-            systemInstruction: "You are a helpful corporate assistant for Tallman Equipment. You are professional, concise, and helpful. You know about industrial equipment, safety gear, and corporate logistics."
-        },
-        history: history
+    // Map history to the format expected by startChat
+    const chatHistory = history.map(h => ({
+        role: h.role === 'user' ? 'user' : 'model',
+        parts: h.parts
+    }));
+
+    const chat = model.startChat({
+        history: chatHistory
     });
 
-    const response = await chat.sendMessage({ message });
-    return response.text || "I couldn't generate a response.";
+    const result = await chat.sendMessage(message);
+    const response = await result.response;
+    return response.text();
 
   } catch (error) {
     console.error("Gemini API Error:", error);
     return "Sorry, I encountered an error connecting to the AI service.";
   }
+  */
+
+  return "AI features are currently disabled by administrator.";
 };

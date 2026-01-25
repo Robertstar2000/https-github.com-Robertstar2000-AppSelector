@@ -1,20 +1,63 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Tallman App Selector
 
-# Run and deploy your AI Studio app
+The **Tallman App Selector** is a high-performance distributed application designed to manage and select applications within the Tallman ecosystem. Built on the **Enterprise Application Foundation**, it leverages dual-persistence, secure identity governance, and fault-tolerant AI orchestration.
 
-This contains everything you need to run your app locally.
+## Quick Install (PowerShell)
+```powershell
+# Docker Desktop (Dev/Standard)
+docker-compose -f docker-compose.yml up --build
 
-View your app in AI Studio: https://ai.studio/apps/drive/1QnpkDiWfwT5kj23pqdoTdmT-k5uDKGkN
+# Docker Swarm (Production/Cluster)
+docker stack deploy -c docker-compose.swarm.yml tallman_app
+```
+**URL**: [http://localhost:3100](http://localhost:3100)
 
-## Run Locally
+## Repository
+**URL**: [https://github.com/Robertstar2000-AppSelector](https://github.com/Robertstar2000-AppSelector)
 
-**Prerequisites:**  Node.js
+## Product Specification
+- **Name**: Tallman App Selector
+- **Version**: 1.1.0
+- **Architecture**: Microservices-ready (Docker/Swarm)
+- **Orchestration**: Docker Swarm (Refer to `swarm.md`)
+- **Frontend**: React 19 + Vite
+- **Backend**: Node.js 20 (Express)
+- **Database**: PostgreSQL 15 (Production) / SQLite (Dev Fallback)
 
+## Network Configuration
+| Service | Internal Port | Host Port | Protocol |
+|---------|---------------|-----------|----------|
+| App     | 3100          | 3100      | HTTP     |
+| Database| 5432          | 5432      | TCP      |
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Installation Requirements
+
+### 1. Docker Desktop (Recommended)
+Required for full stack emulation and production-like environment.
+- **System**: Windows 10/11 (WSL2), macOS, or Linux.
+- **Version**: Docker Engine 24+
+
+### 2. Development Mode
+For local development without Docker (Partial Functional):
+- **Node.js**: v20+
+- **Database**: SQLite (built-in fallback)
+
+### 3. Docker Swarm
+This application is "Swarm-Ready".
+- **Replicas**: Configured for 1 replica by default (stateful DB).
+- **Persistence**: Requires node-pinning or shared volume drivers for multi-node clusters.
+
+## Quick Start
+```bash
+# Clone
+git clone https://github.com/Robertstar2000-AppSelector.git
+cd TallmanAppSelector
+
+# Docker Run (Production/Full Stack)
+docker-compose up --build
+
+# Local Dev (Frontend + Backend)
+npm install
+npm run dev
+npm run server
+```

@@ -1,69 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tallman Application Selector</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              tallman: {
-                blue: '#00539C', // Approximate Tallman Blue
-                red: '#ED1C24',  // Approximate Tallman Red
-                dark: '#1a1a1a',
-                light: '#f4f4f5'
-              }
-            },
-            animation: {
-              'fade-in': 'fadeIn 0.3s ease-out',
-              'slide-up': 'slideUp 0.4s ease-out',
-            },
-            keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' },
-              },
-              slideUp: {
-                '0%': { transform: 'translateY(20px)', opacity: '0' },
-                '100%': { transform: 'translateY(0)', opacity: '1' },
-              }
-            }
-          }
-        }
-      }
-    </script>
-    <style>
-      /* Custom Scrollbar for sleek look */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #00539C; 
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #003366; 
-      }
-    </style>
-  <script type="importmap">
-{
-  "imports": {
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/"
-  }
-}
-</script>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tallman Application Selector</title>
+
+  <style>
+    /* Custom Scrollbar for sleek look */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #00539C;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #003366;
+    }
+  </style>
+  <script type="module" src="/index.tsx"></script>
 </head>
-  <body class="bg-gray-50 text-slate-800 antialiased overflow-x-hidden">
-    <div id="root"></div>
-  </body>
+
+<body class="bg-gray-50 text-slate-800 antialiased overflow-x-hidden">
+  <div id="root"></div>
+</body>
+
 </html>

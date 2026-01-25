@@ -33,7 +33,12 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, onDele
         iconName: 'Box',
         status: AppStatus.ACTIVE,
         type: AppType.URL,
-        url: ''
+
+        url: '',
+        owner: '',
+        sourceUrl: '',
+        backendPort: '',
+        aiModel: ''
       });
     }
   }, [app, isOpen]);
@@ -67,10 +72,10 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, onDele
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Application Name</label>
-            <input 
+            <input
               required
               name="name"
               value={formData.name}
@@ -80,9 +85,55 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, onDele
             />
           </div>
 
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Owner (Optional)</label>
+              <input
+                name="owner"
+                value={formData.owner || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tallman-blue outline-none"
+                placeholder="Product Owner / Team"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Backend Port (Optional)</label>
+              <input
+                name="backendPort"
+                value={formData.backendPort || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tallman-blue outline-none"
+                placeholder="e.g. 8080"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Source Code (Optional)</label>
+              <input
+                name="sourceUrl"
+                value={formData.sourceUrl || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tallman-blue outline-none"
+                placeholder="GitHub / GitLab URL"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">AI Model (Optional)</label>
+              <input
+                name="aiModel"
+                value={formData.aiModel || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tallman-blue outline-none"
+                placeholder="e.g. Gemini 1.5 Pro"
+              />
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <input 
+            <input
               name="description"
               value={formData.description}
               onChange={handleChange}
@@ -92,39 +143,39 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, onDele
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                <select 
-                  name="type"
-                  value={formData.type}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tallman-blue outline-none"
-                >
-                  <option value={AppType.URL}>Web Link (URL)</option>
-                  <option value={AppType.EXE}>Local Executable (.exe)</option>
-                  <option value={AppType.INTERNAL_VIEW}>Internal View</option>
-                </select>
-             </div>
-             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select 
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tallman-blue outline-none"
-                >
-                  <option value={AppStatus.ACTIVE}>Active</option>
-                  <option value={AppStatus.MAINTENANCE}>Maintenance</option>
-                  <option value={AppStatus.DISABLED}>Disabled</option>
-                </select>
-             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+              <select
+                name="type"
+                value={formData.type}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tallman-blue outline-none"
+              >
+                <option value={AppType.URL}>Web Link (URL)</option>
+                <option value={AppType.EXE}>Local Executable (.exe)</option>
+                <option value={AppType.INTERNAL_VIEW}>Internal View</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tallman-blue outline-none"
+              >
+                <option value={AppStatus.ACTIVE}>Active</option>
+                <option value={AppStatus.MAINTENANCE}>Maintenance</option>
+                <option value={AppStatus.DISABLED}>Disabled</option>
+              </select>
+            </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-                {formData.type === AppType.EXE ? 'File Path' : 'URL / Action'}
+              {formData.type === AppType.EXE ? 'File Path' : 'URL / Action'}
             </label>
-            <input 
+            <input
               name="url"
               value={formData.url || ''}
               onChange={handleChange}
@@ -136,46 +187,46 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, onDele
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-                Icon Name (Lucide React)
-                <a href="https://lucide.dev/icons" target="_blank" rel="noreferrer" className="text-blue-500 hover:underline text-xs"><HelpCircle className="w-3 h-3 inline"/></a>
+              Icon Name (Lucide React)
+              <a href="https://lucide.dev/icons" target="_blank" rel="noreferrer" className="text-blue-500 hover:underline text-xs"><HelpCircle className="w-3 h-3 inline" /></a>
             </label>
             <div className="flex gap-2">
-                <input 
+              <input
                 name="iconName"
                 value={formData.iconName}
                 onChange={handleChange}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tallman-blue outline-none"
                 placeholder="e.g. Activity"
-                />
-                <div className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-lg border border-gray-200">
-                    <IconPreview className="w-5 h-5 text-gray-600" />
-                </div>
+              />
+              <div className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-lg border border-gray-200">
+                <IconPreview className="w-5 h-5 text-gray-600" />
+              </div>
             </div>
           </div>
 
           <div className="flex gap-3 pt-4 border-t border-gray-100">
-             {app && (
-                 <button 
-                    type="button" 
-                    onClick={() => onDelete(app.id)}
-                    className="px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg font-medium transition-colors"
-                 >
-                    <Trash2 className="w-5 h-5" />
-                 </button>
-             )}
-             <button 
-                type="button" 
-                onClick={onClose}
-                className="flex-1 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors"
-             >
-                Cancel
-             </button>
-             <button 
-                type="submit" 
-                className="flex-1 px-4 py-2 text-white bg-tallman-blue hover:bg-blue-800 rounded-lg font-medium shadow-lg shadow-blue-900/20 transition-all flex items-center justify-center gap-2"
-             >
-                <Save className="w-4 h-4" /> Save
-             </button>
+            {app && (
+              <button
+                type="button"
+                onClick={() => onDelete(app.id)}
+                className="px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg font-medium transition-colors"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 px-4 py-2 text-white bg-tallman-blue hover:bg-blue-800 rounded-lg font-medium shadow-lg shadow-blue-900/20 transition-all flex items-center justify-center gap-2"
+            >
+              <Save className="w-4 h-4" /> Save
+            </button>
           </div>
         </form>
       </div>

@@ -1,20 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
+
   /* Custom Scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
   }
+
   ::-webkit-scrollbar-track {
-    background: #f1f1f1; 
+    background: #f1f1f1;
   }
+
   ::-webkit-scrollbar-thumb {
-    background: #00539C; 
+    background: #00539C;
     border-radius: 4px;
   }
+
   ::-webkit-scrollbar-thumb:hover {
-    background: #003366; 
+    background: #003366;
   }
 }

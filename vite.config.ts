@@ -12,12 +12,12 @@ export default defineConfig(({ mode }) => {
       strictPort: true, // Fail if port in use
       proxy: {
         '/api': {
-          target: 'http://localhost:3001',
+          target: 'http://localhost:3105',
           changeOrigin: true,
           secure: false,
         },
         '/auth': {
-          target: 'http://localhost:3001',
+          target: 'http://localhost:3105',
           changeOrigin: true,
           secure: false,
         }

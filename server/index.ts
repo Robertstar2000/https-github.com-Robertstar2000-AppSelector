@@ -3,7 +3,7 @@ import { db } from './db';
 import { authRouter } from './auth';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3105;
 
 app.use(express.json());
 

@@ -25,7 +25,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=tallman_app
-      - PORT=3001
+      - PORT=3105
     volumes:
       # In absolute production, these would be built into the image or mounted from NFS
       - .:/app

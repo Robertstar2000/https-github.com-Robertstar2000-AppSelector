@@ -6,6 +6,11 @@ services:
     working_dir: /app
     environment:
       - NODE_ENV=development
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=tallman_app
+      - PORT=3100
     volumes:
       - .:/app
       - /app/node_modules # Anonymous Volume Shadowing

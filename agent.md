@@ -38,7 +38,7 @@ const translateParams = (text: string) => {
 ---
 
 
-## 🛠️ 5. Docker Desktop: Advanced Build & Maintenance (Compiled)
+## 🛠️ 2. Docker Desktop: Advanced Build & Maintenance (Compiled)
 
 This skill optimizes Docker for development environments and eliminates common binary architectural failures.
 
@@ -71,3 +71,15 @@ Implement a global wrapper for AI SDKs (Google Generative AI, OpenAI, etc.).
 3. **Identity**: Create authentication routes with Governance Overrides and Email-First sync logic.
 4. **Orchestration**: Define the `docker-compose.yml` (without version tag) using `bullseye-slim`.
 5. **Entrypoint**: Create and `chmod +x` a `docker-entrypoint.sh` for runtime bootstrapping.
+
+## 🤖 4. AI: Documentation requirments
+requirements 
+
+### The SKILL.md
+List of a skills required for all Tallman Applications.
+
+### The readme.md
+Title and descriptoin of app, IP , Ports, Repository, Product spec, instaltion requirments for Docker Desktop, Docker Swarm, and Dev mode.
+
+### The help.md
+Compllete descrition of appcation and use plus detailed user instructions for all functions.

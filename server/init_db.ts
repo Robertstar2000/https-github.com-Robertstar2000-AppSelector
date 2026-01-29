@@ -35,32 +35,34 @@ CREATE TABLE IF NOT EXISTS apps (
 `;
 
 const initDb = async () => {
-    console.log('Initializing Database...');
+  console.log('Initializing Database...');
 
-    // Sequential Schema Protocol
-    // Postgres drivers often fail on multi-statement strings.
-    // We split by ';' and execute sequentially.
-    const statements = schema
-        .split(';')
-        .map(s => s.trim())
-        .filter(s => s.length > 0);
+  // Sequential Schema Protocol
+  // Postgres drivers often fail on multi-statement strings.
+  // We split by ';' and execute sequentially.
+  const statements = schema
+    .split(';')
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
 
-    try {
-        // In a real app we might want to wrap this in a transaction or allow partial success if suitable
-        for (const statement of statements) {
-            console.log(`Executing: ${statement.substring(0, 50)}...`);
-            await db.run(statement);
-        }
-        console.log('Database initialization complete.');
-    } catch (error) {
-        console.error('Database initialization failed:', error);
-        process.exit(1);
+  try {
+    // In a real app we might want to wrap this in a transaction or allow partial success if suitable
+    for (const statement of statements) {
+      console.log(`Executing: ${statement.substring(0, 50)}...`);
+      await db.run(statement);
     }
+    console.log('Database initialization complete.');
+  } catch (error) {
+    console.error('Database initialization failed:', error);
+    process.exit(1);
+  }
 };
 
+import { fileURLToPath } from 'url';
+
 // Run if called directly
-if (require.main === module) {
-    initDb();
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  initDb();
 }
 
 export { initDb };

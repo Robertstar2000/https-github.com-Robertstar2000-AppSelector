@@ -7,9 +7,10 @@ export interface AppCardProps {
   onClick: (app: AppDefinition) => void;
   isAdmin: boolean;
   onEdit: (app: AppDefinition) => void;
+  dragHandleProps?: any;
 }
 
-const AppCard: React.FC<AppCardProps> = ({ app, onClick, isAdmin, onEdit }) => {
+const AppCard: React.FC<AppCardProps> = ({ app, onClick, isAdmin, onEdit, dragHandleProps }) => {
   // Dynamically resolve icon
   const IconComponent = (LucideIcons as any)[app.iconName] || LucideIcons.Box;
 
@@ -35,14 +36,18 @@ const AppCard: React.FC<AppCardProps> = ({ app, onClick, isAdmin, onEdit }) => {
       onClick={handleCardClick}
       className={`
         relative group overflow-hidden rounded-xl border p-6 transition-all duration-300
-        ${isAdmin ? 'cursor-context-menu border-dashed border-tallman-blue/50' : 'cursor-pointer border-gray-200'}
+        ${isAdmin ? 'cursor-pointer border-dashed border-tallman-blue/50' : 'cursor-pointer border-gray-200'}
         ${isGreyedOut ? 'bg-gray-50' : 'bg-white hover:shadow-xl hover:-translate-y-1 hover:border-tallman-blue/30'}
       `}
     >
-      {/* Admin Indicator */}
+      {/* Admin Indicator / Drag Handle */}
       {isAdmin && (
-        <div className="absolute top-2 right-2 z-20">
-          <LucideIcons.Settings2 className="w-4 h-4 text-gray-400" />
+        <div
+          className="absolute top-2 right-2 z-20 cursor-move p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          {...dragHandleProps}
+          title="Drag to reorder"
+        >
+          <LucideIcons.GripVertical className="w-4 h-4 text-gray-400" />
         </div>
       )}
 

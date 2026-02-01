@@ -18,8 +18,11 @@ const SortableAppCard: React.FC<AppCardProps> = (props) => {
     };
 
     return (
-        <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            <AppCard {...props} />
+        <div ref={setNodeRef} style={style}>
+            <AppCard
+                {...props}
+                dragHandleProps={{ ...attributes, ...listeners }}
+            />
         </div>
     );
 };

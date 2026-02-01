@@ -9,7 +9,7 @@ import {
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy } from '@dnd-kit/sortable';
 
-import { AppDefinition, AppType, AppStatus } from './types';
+import { AppDefinition, AppType, AppStatus, AppSettings } from './types';
 import AppCard from './components/AppCard';
 import SortableAppCard from './components/SortableAppCard';
 import AdminModal from './components/AdminModal';
@@ -19,6 +19,7 @@ function App() {
   const [apps, setApps] = useState<AppDefinition[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [settings, setSettings] = useState<AppSettings>({ dockerMode: 'desktop' });
 
   // Admin Mode Triggers
   const [secretCount, setSecretCount] = useState(0);
@@ -57,8 +58,19 @@ function App() {
     }
   };
 
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+      setSettings(data);
+    } catch (e) {
+      console.error('Failed to load settings', e);
+    }
+  };
+
   useEffect(() => {
     fetchApps();
+    fetchSettings();
   }, []);
 
   const handleAppClick = (app: AppDefinition) => {
@@ -70,8 +82,26 @@ function App() {
       }
     } else if (app.type === AppType.EXE) {
       showToast(`Launching ${app.name} (${app.url}). Check your downloads or protocol handlers.`);
-    } else if (app.url) {
-      window.open(app.url, '_blank');
+    } else {
+      const targetUrl = settings.dockerMode === 'swarm' && app.swarmUrl ? app.swarmUrl : app.url;
+      if (targetUrl) {
+        window.open(targetUrl, '_blank');
+      }
+    }
+  };
+
+  const handleDockerModeToggle = async (mode: 'desktop' | 'swarm') => {
+    try {
+      const newSettings = { ...settings, dockerMode: mode };
+      setSettings(newSettings);
+      await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newSettings)
+      });
+      showToast(`Switched to Docker ${mode === 'swarm' ? 'Swarm' : 'Desktop'}`);
+    } catch (e) {
+      showToast("Error saving settings");
     }
   };
 
@@ -190,7 +220,21 @@ function App() {
           </div>
           <div className="flex items-center gap-4">
             {isAdmin && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
+                <div className="flex bg-gray-100 p-0.5 rounded-lg border border-gray-200">
+                  <button
+                    onClick={() => handleDockerModeToggle('desktop')}
+                    className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase transition-all ${settings.dockerMode === 'desktop' ? 'bg-white text-tallman-blue shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                  >
+                    Desktop
+                  </button>
+                  <button
+                    onClick={() => handleDockerModeToggle('swarm')}
+                    className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase transition-all ${settings.dockerMode === 'swarm' ? 'bg-white text-tallman-blue shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                  >
+                    Swarm
+                  </button>
+                </div>
                 <button
                   onClick={handleAdminToggle}
                   className="hidden sm:flex items-center gap-2 px-3 py-1 bg-red-50 text-red-600 rounded-full border border-red-100 text-xs font-bold uppercase hover:bg-red-100 transition-colors"

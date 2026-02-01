@@ -29,8 +29,14 @@ CREATE TABLE IF NOT EXISTS apps (
   source_url TEXT,
   backend_port TEXT,
   ai_model TEXT,
+  swarm_url TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS settings (
+  key TEXT PRIMARY KEY,
+  value TEXT
 );
 `;
 

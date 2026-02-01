@@ -20,10 +20,10 @@ const AppCard: React.FC<AppCardProps> = ({ app, onClick, isAdmin, onEdit }) => {
   const isGreyedOut = isDisabled || isMaintenance;
 
   const handleCardClick = () => {
-    if (isDisabled) return;
     if (isAdmin) {
       onEdit(app);
     } else {
+      if (isDisabled) return;
       // Allow clicking maintenance items only if admin, otherwise block
       if (isMaintenance) return;
       onClick(app);

@@ -38,7 +38,8 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, onDele
         owner: '',
         sourceUrl: '',
         backendPort: '',
-        aiModel: ''
+        aiModel: '',
+        swarmUrl: ''
       });
     }
   }, [app, isOpen]);
@@ -171,18 +172,33 @@ const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, onSave, onDele
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {formData.type === AppType.EXE ? 'File Path' : 'URL / Action'}
-            </label>
-            <input
-              name="url"
-              value={formData.url || ''}
-              onChange={handleChange}
-              disabled={formData.type === AppType.INTERNAL_VIEW}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tallman-blue outline-none disabled:bg-gray-100 disabled:text-gray-400"
-              placeholder={formData.type === AppType.EXE ? 'C:\\Program Files\\...' : 'https://...'}
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {formData.type === AppType.EXE ? 'File Path' : 'Docker Desktop URL'}
+              </label>
+              <input
+                name="url"
+                value={formData.url || ''}
+                onChange={handleChange}
+                disabled={formData.type === AppType.INTERNAL_VIEW}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tallman-blue outline-none disabled:bg-gray-100 disabled:text-gray-400"
+                placeholder={formData.type === AppType.EXE ? 'C:\\Program Files\\...' : 'https://...'}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Docker Swarm URL
+              </label>
+              <input
+                name="swarmUrl"
+                value={formData.swarmUrl || ''}
+                onChange={handleChange}
+                disabled={formData.type === AppType.INTERNAL_VIEW || formData.type === AppType.EXE}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tallman-blue outline-none disabled:bg-gray-100 disabled:text-gray-400"
+                placeholder="https://swarm.example.com"
+              />
+            </div>
           </div>
 
           <div>

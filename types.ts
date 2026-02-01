@@ -24,7 +24,12 @@ export interface AppDefinition {
   sourceUrl?: string;
   backendPort?: string;
   aiModel?: string;
+  swarmUrl?: string;
   sortOrder?: number;
+}
+
+export interface AppSettings {
+  dockerMode: 'desktop' | 'swarm';
 }
 
 export interface ChatMessage {

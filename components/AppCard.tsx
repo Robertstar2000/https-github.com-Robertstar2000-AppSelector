@@ -20,7 +20,15 @@ const AppCard: React.FC<AppCardProps> = ({ app, onClick, isAdmin, onEdit, dragHa
   // Combine visual states for "greyed out" look
   const isGreyedOut = isDisabled || isMaintenance;
 
-  const handleCardClick = () => {
+  const handleCardClick = (e: React.MouseEvent) => {
+    // If the click originated from the drag handle, don't trigger the modal
+    if ((e.target as HTMLElement).closest('[data-drag-handle]')) {
+      return;
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+
     if (isAdmin) {
       onEdit(app);
     } else {
@@ -43,8 +51,13 @@ const AppCard: React.FC<AppCardProps> = ({ app, onClick, isAdmin, onEdit, dragHa
       {/* Admin Indicator / Drag Handle */}
       {isAdmin && (
         <div
+          data-drag-handle
           className="absolute top-2 right-2 z-20 cursor-move p-2 hover:bg-gray-100 rounded-lg transition-colors"
           {...dragHandleProps}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            dragHandleProps?.onPointerDown?.(e);
+          }}
           title="Drag to reorder"
         >
           <LucideIcons.GripVertical className="w-4 h-4 text-gray-400" />

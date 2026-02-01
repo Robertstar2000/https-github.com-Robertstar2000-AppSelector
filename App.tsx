@@ -110,11 +110,18 @@ function App() {
   };
 
   const handleAdminToggle = () => {
+    if (isAdmin) {
+      setIsAdmin(false);
+      setSecretCount(0);
+      showToast("Admin Mode Deactivated");
+      return;
+    }
+
     setSecretCount(prev => prev + 1);
     if (secretCount + 1 >= 5) {
-      setIsAdmin(!isAdmin);
+      setIsAdmin(true);
       setSecretCount(0);
-      showToast(isAdmin ? "Admin Mode Deactivated" : "Admin Mode Activated");
+      showToast("Admin Mode Activated");
     }
   };
 
@@ -358,7 +365,7 @@ function App() {
       )}
 
       {/* Modals */}
-      <div className={isEditModalOpen ? "block" : "hidden"}> {/* Prevent unmounting to keep state if needed, or just conditional render */}
+      {isEditModalOpen && (
         <AdminModal
           isOpen={isEditModalOpen}
           onClose={() => setEditModalOpen(false)}
@@ -366,7 +373,7 @@ function App() {
           onDelete={handleDeleteApp}
           app={editingApp}
         />
-      </div>
+      )}
 
       <ChatOverlay
         isOpen={isChatOpen}
